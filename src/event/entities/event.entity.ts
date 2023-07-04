@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Company } from 'src/company/entities/company.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Event {
@@ -12,4 +13,6 @@ export class Event {
   description: string;
   @Column()
   date: Date;
+  @ManyToOne(() => Company, (company) => company.event)
+  company: Company;
 }

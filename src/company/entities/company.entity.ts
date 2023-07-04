@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Account } from 'src/account/entities/account.entity';
+import { Event } from 'src/event/entities/event.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Company {
@@ -8,4 +16,8 @@ export class Company {
   name: string;
   @Column()
   info: string;
+  @OneToOne(() => Account, (account) => account.company)
+  account: Account;
+  @OneToMany(() => Event, (event) => event.company)
+  event: Event[];
 }

@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Company } from 'src/company/entities/company.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Account {
@@ -19,4 +26,10 @@ export class Account {
 
   @Column({ default: false })
   admin: boolean;
+
+  @OneToOne(() => Company, (company) => company.account, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  company: Company;
 }
