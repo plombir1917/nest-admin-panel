@@ -19,7 +19,7 @@ export class Account {
   surname: string;
 
   @Column()
-  login: string;
+  email: string;
 
   @Column()
   password: string;

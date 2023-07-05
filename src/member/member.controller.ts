@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -15,6 +17,7 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
+  @UsePipes(new ValidationPipe())
   @Post()
   create(@Body() createMemberDto: CreateMemberDto) {
     return this.memberService.create(createMemberDto);
@@ -30,6 +33,7 @@ export class MemberController {
     return this.memberService.findOne(+id);
   }
 
+  @UsePipes(new ValidationPipe())
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
     return this.memberService.update(+id, updateMemberDto);
