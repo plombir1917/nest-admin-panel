@@ -7,6 +7,7 @@ import { CompanyModule } from './company/company.module';
 import { EventModule } from './event/event.module';
 import { MemberModule } from './member/member.module';
 import { dataSourceOptions } from 'db/data-source';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { dataSourceOptions } from 'db/data-source';
     CompanyModule,
     EventModule,
     MemberModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

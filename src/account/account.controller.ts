@@ -17,8 +17,8 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
   @UsePipes(new ValidationPipe())
-  @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
+  @Post('register')
+  async register(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
 

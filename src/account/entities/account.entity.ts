@@ -1,11 +1,5 @@
 import { Company } from 'src/company/entities/company.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Account {
@@ -18,18 +12,17 @@ export class Account {
   @Column()
   surname: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
 
   @Column({ default: false })
-  admin: boolean;
+  admin?: boolean;
 
   @OneToOne(() => Company, (company) => company.account, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   company: Company;
 }
