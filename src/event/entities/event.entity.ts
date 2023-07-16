@@ -1,5 +1,13 @@
 import { Company } from 'src/company/entities/company.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Member } from 'src/member/entities/member.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
@@ -12,7 +20,10 @@ export class Event {
   @Column()
   description: string;
   @Column()
-  date: Date;
+  date: string;
   @ManyToOne(() => Company, (company) => company.event)
+  @JoinColumn()
   company: Company;
+  @ManyToMany(() => Member, (member) => member.event)
+  member: Member[];
 }

@@ -9,19 +9,28 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { AuthDto } from 'src/auth/dto/auth.dto';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly authService: AuthService,
+  ) {}
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
-
+  @Post('login')
+  async login(@Body() { login, password }: AuthDto) {
+    const { email } = await this.authService.validateAccount(login, password);
+    return this.authService.login(email);
+  }
   @Get()
   findAll() {
     return this.accountService.findAll();

@@ -1,8 +1,6 @@
 import {
-  IsBoolean,
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -12,17 +10,11 @@ export class CreateAccountDto {
   @IsString()
   name: string;
 
-  @IsString()
   @IsNotEmpty()
-  surname: string;
-
   @IsEmail()
   email: string;
 
+  @IsNotEmpty()
   @IsStrongPassword()
   password: string;
-
-  @IsOptional()
-  @IsBoolean()
-  admin?: boolean;
 }

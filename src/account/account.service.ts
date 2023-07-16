@@ -5,7 +5,7 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
 import { encodePassword } from 'src/utils/bcrypt';
-import { ALREADY_REGISTERED_ERROR } from '../auth/auth.constants';
+import { ALREADY_REGISTERED_ERROR } from '../constants/exception.constants';
 
 @Injectable()
 export class AccountService {

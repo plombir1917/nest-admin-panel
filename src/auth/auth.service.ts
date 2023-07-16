@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   ACCOUNT_NOT_FOUND_ERROR,
   WRONG_PASSWORD_ERROR,
-} from 'src/auth/auth.constants';
+} from 'src/constants/exception.constants';
 import { Account } from 'src/account/entities/account.entity';
 import { comparePassword } from 'src/utils/bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
