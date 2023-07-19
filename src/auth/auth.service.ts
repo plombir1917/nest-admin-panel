@@ -1,6 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {
   ACCOUNT_NOT_FOUND_ERROR,
+  CANT_BE_EMPTY_ERROR,
   WRONG_PASSWORD_ERROR,
 } from 'src/constants/exception.constants';
 import { Account } from 'src/account/entities/account.entity';
@@ -17,16 +22,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async validateAccount(
-    email: string,
+    login: string,
     password: string,
   ): Promise<Pick<Account, 'email'>> {
+    if (!login) {
+      throw new BadRequestException(CANT_BE_EMPTY_ERROR);
+    }
     const account = await this.authRepository.findOne({
       where: {
-        email: email,
+        email: login,
       },
     });
     if (!account) {
       throw new UnauthorizedException(ACCOUNT_NOT_FOUND_ERROR);
+    }
+    if (!password) {
+      throw new BadRequestException(CANT_BE_EMPTY_ERROR);
     }
     const isCorrectPassword = await comparePassword(password, account.password);
     if (!isCorrectPassword) {

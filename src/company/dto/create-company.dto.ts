@@ -5,5 +5,6 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   name: string;
   @IsString()
+  @IsNotEmpty()
   info: string;
 }

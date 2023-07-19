@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CANT_BE_EMPTY_ERROR } from 'src/constants/exception.constants';
 import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -11,6 +12,9 @@ export class CompanyService {
     @InjectRepository(Company) private companyRepository: Repository<Company>,
   ) {}
   create(createCompanyDto: CreateCompanyDto) {
+    if (!createCompanyDto.name) {
+      throw new BadRequestException(CANT_BE_EMPTY_ERROR);
+    }
     const newCompany = this.companyRepository.create(createCompanyDto);
     return this.companyRepository.save(newCompany);
   }
