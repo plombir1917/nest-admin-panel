@@ -1,6 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CANT_BE_EMPTY_ERROR } from 'src/constants/exception.constants';
+import {
+  CANT_BE_EMPTY_ERROR,
+  COMPANY_NOT_FOUND_ERROR,
+} from 'src/constants/exception.constants';
 import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -19,21 +26,35 @@ export class CompanyService {
     return this.companyRepository.save(newCompany);
   }
 
-  findAll() {
-    return this.companyRepository.find();
+  async findAll() {
+    const company = await this.companyRepository.find();
+    if (!company.length) {
+      throw new NotFoundException(COMPANY_NOT_FOUND_ERROR);
+    }
+    return company;
   }
 
-  findOne(id: number) {
-    return this.companyRepository.findOneBy({ id });
+  async findOne(id: number) {
+    const company = await this.companyRepository.findOneBy({ id });
+    if (!company) {
+      throw new NotFoundException(COMPANY_NOT_FOUND_ERROR);
+    }
+    return company;
   }
 
   async update(id: number, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.findOne(id);
+    if (!company) {
+      throw new NotFoundException(COMPANY_NOT_FOUND_ERROR);
+    }
     return this.companyRepository.save({ ...company, ...updateCompanyDto });
   }
 
   async remove(id: number) {
     const company = await this.findOne(id);
+    if (!company) {
+      throw new NotFoundException(COMPANY_NOT_FOUND_ERROR);
+    }
     return this.companyRepository.remove(company);
   }
 }

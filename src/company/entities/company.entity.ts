@@ -1,5 +1,5 @@
 import { Account } from 'src/account/entities/account.entity';
-import { Event } from 'src/event/entities/event.entity';
+import { Event } from 'src/events/entities/events.entity';
 import {
   Column,
   Entity,

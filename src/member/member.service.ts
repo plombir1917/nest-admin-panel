@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MEMBER_NOT_FOUND_ERROR } from 'src/constants/exception.constants';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
@@ -15,21 +16,35 @@ export class MemberService {
     return this.memberRepository.save(newMember);
   }
 
-  findAll() {
-    return this.memberRepository.find();
+  async findAll() {
+    const members = await this.memberRepository.find();
+    if (!members.length) {
+      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+    }
+    return members;
   }
 
-  findOne(id: number) {
-    return this.memberRepository.findOneBy({ id });
+  async findOne(id: number) {
+    const member = await this.memberRepository.findOneBy({ id });
+    if (!member) {
+      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+    }
+    return member;
   }
 
   async update(id: number, updateMemberDto: UpdateMemberDto) {
     const member = await this.findOne(id);
+    if (!member) {
+      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+    }
     return this.memberRepository.save({ ...member, ...updateMemberDto });
   }
 
   async remove(id: number) {
     const member = await this.findOne(id);
+    if (!member) {
+      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+    }
     return this.memberRepository.remove(member);
   }
 }
