@@ -29,7 +29,8 @@ export class AccountController {
   @Post('login')
   async login(@Body() { email, password }: AuthDto) {
     const login = await this.authService.validateAccount(email, password);
-    return this.authService.login(login.email);
+    const role = await this.authService.findAccount(email);
+    return this.authService.login(login.email, role.value);
   }
   @Get()
   findAll() {

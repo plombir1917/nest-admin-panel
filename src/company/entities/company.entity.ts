@@ -3,6 +3,7 @@ import { Event } from 'src/events/entities/events.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -17,6 +18,7 @@ export class Company {
   @Column()
   info: string;
   @OneToOne(() => Account, (account) => account.company)
+  @JoinColumn()
   account: Account;
   @OneToMany(() => Event, (event) => event.company)
   event: Event[];

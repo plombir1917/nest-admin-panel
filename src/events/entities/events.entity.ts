@@ -19,8 +19,8 @@ export class Event {
   place: string;
   @Column()
   description: string;
-  @Column()
-  date: string;
+  @Column({ type: 'timestamptz' })
+  date: Date;
   @ManyToOne(() => Company, (company) => company.event)
   @JoinColumn()
   company: Company;

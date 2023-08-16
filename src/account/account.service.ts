@@ -12,6 +12,7 @@ import { encodePassword } from 'src/utils/bcrypt';
 import {
   ACCOUNT_NOT_FOUND_ERROR,
   ALREADY_REGISTERED_ERROR,
+  ROLE_NOT_FOUND_ERROR,
 } from '../constants/exception.constants';
 import { RolesService } from 'src/roles/roles.service';
 
@@ -36,6 +37,9 @@ export class AccountService {
       password,
     });
     const role = await this.rolesService.getRoleByValue('USER');
+    if (!role) {
+      throw new NotFoundException(ROLE_NOT_FOUND_ERROR);
+    }
     newAccount.role = role;
     return this.accountRepository.save(newAccount);
   }

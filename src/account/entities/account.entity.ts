@@ -1,4 +1,5 @@
 import { Company } from 'src/company/entities/company.entity';
+import { Member } from 'src/member/entities/member.entity';
 import { Role } from 'src/roles/entities/roles.entity';
 import {
   Column,
@@ -26,8 +27,10 @@ export class Account {
   @OneToOne(() => Company, (company) => company.account, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   company: Company;
+
+  @OneToOne(() => Member, (member) => member.account)
+  member: Member;
 
   @ManyToOne(() => Role, (role) => role.account)
   @JoinColumn()

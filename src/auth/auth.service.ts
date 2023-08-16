@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import {
@@ -43,8 +44,21 @@ export class AuthService {
     return { email: account.email };
   }
 
-  async login(login: string) {
-    const payload = { login };
+  async login(login: string, value: string) {
+    const payload = { login, value };
     return { access_token: await this.jwtService.signAsync(payload) };
+  }
+
+  async findAccount(email: string) {
+    const account = await this.authRepository.findOne({
+      where: {
+        email: email,
+      },
+      relations: { role: true },
+    });
+    if (!account) {
+      throw new NotFoundException(ACCOUNT_NOT_FOUND_ERROR);
+    }
+    return account.role;
   }
 }
