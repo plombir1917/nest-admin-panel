@@ -1,8 +1,10 @@
 import { Company } from 'src/company/entities/company.entity';
+import { Role } from 'src/roles/entities/roles.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,4 +28,8 @@ export class Account {
   })
   @JoinColumn()
   company: Company;
+
+  @ManyToOne(() => Role, (role) => role.account)
+  @JoinColumn()
+  role: Role;
 }

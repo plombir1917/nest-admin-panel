@@ -21,16 +21,13 @@ export class AuthService {
     private readonly authRepository: Repository<Account>,
     private jwtService: JwtService,
   ) {}
-  async validateAccount(
-    login: string,
-    password: string,
-  ): Promise<Pick<Account, 'email'>> {
-    if (!login) {
+  async validateAccount(email: string, password: string) {
+    if (!email) {
       throw new BadRequestException(CANT_BE_EMPTY_ERROR);
     }
     const account = await this.authRepository.findOne({
       where: {
-        email: login,
+        email: email,
       },
     });
     if (!account) {
@@ -46,8 +43,8 @@ export class AuthService {
     return { email: account.email };
   }
 
-  async login(email: string) {
-    const payload = { email };
+  async login(login: string) {
+    const payload = { login };
     return { access_token: await this.jwtService.signAsync(payload) };
   }
 }

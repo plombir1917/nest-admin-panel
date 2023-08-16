@@ -13,11 +13,13 @@ import {
   ACCOUNT_NOT_FOUND_ERROR,
   ALREADY_REGISTERED_ERROR,
 } from '../constants/exception.constants';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AccountService {
   constructor(
     @InjectRepository(Account) private accountRepository: Repository<Account>,
+    private rolesService: RolesService,
   ) {}
   async create(createAccountDto: CreateAccountDto) {
     const existAccount = await this.accountRepository.findOne({
@@ -33,6 +35,8 @@ export class AccountService {
       ...createAccountDto,
       password,
     });
+    const role = await this.rolesService.getRoleByValue('USER');
+    newAccount.role = role;
     return this.accountRepository.save(newAccount);
   }
 

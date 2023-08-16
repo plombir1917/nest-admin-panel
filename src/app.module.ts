@@ -9,6 +9,7 @@ import { MemberModule } from './member/member.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from 'db/typeorm.config';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { dataSourceOptions } from 'db/typeorm.config';
     EventModule,
     MemberModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

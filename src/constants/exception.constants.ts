@@ -6,3 +6,4 @@ export const CANT_BE_EMPTY_ERROR = 'Поле не может быть пусты
 export const EVENT_NOT_FOUND_ERROR = 'Мероприятие не найдено!';
 export const MEMBER_NOT_FOUND_ERROR = 'Участник не найден!';
 export const COMPANY_NOT_FOUND_ERROR = 'Компания не найдена!';
+export const ROLE_NOT_FOUND_ERROR = 'Роль не найдена!';

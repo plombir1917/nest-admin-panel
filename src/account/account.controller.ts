@@ -27,9 +27,9 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
   @Post('login')
-  async login(@Body() { login, password }: AuthDto) {
-    const { email } = await this.authService.validateAccount(login, password);
-    return this.authService.login(email);
+  async login(@Body() { email, password }: AuthDto) {
+    const login = await this.authService.validateAccount(email, password);
+    return this.authService.login(login.email);
   }
   @Get()
   findAll() {
