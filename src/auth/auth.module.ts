@@ -15,10 +15,10 @@ const configService = new ConfigService();
     JwtModule.register({
       global: true,
       secret: configService.get('JWTCONSTANT'),
-      signOptions: { expiresIn: '15m' },
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [AuthService],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

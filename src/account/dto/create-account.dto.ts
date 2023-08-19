@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -17,4 +18,8 @@ export class CreateAccountDto {
   @IsNotEmpty()
   @IsStrongPassword()
   password: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isAdmin: boolean;
 }

@@ -14,6 +14,7 @@ import { comparePassword } from 'src/utils/bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from 'src/roles/entities/roles.entity';
 
 @Injectable()
 export class AuthService {
@@ -44,8 +45,8 @@ export class AuthService {
     return { email: account.email };
   }
 
-  async login(login: string, value: string) {
-    const payload = { login, value };
+  async login(login: string, roles: Role) {
+    const payload = { login, roles };
     return { access_token: await this.jwtService.signAsync(payload) };
   }
 

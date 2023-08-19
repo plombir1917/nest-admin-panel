@@ -36,7 +36,11 @@ export class AccountService {
       ...createAccountDto,
       password,
     });
-    const role = await this.rolesService.getRoleByValue('USER');
+    let value = 'USER';
+    if (createAccountDto.isAdmin) {
+      value = 'ADMIN';
+    }
+    const role = await this.rolesService.getRoleByValue(value);
     if (!role) {
       throw new NotFoundException(ROLE_NOT_FOUND_ERROR);
     }
