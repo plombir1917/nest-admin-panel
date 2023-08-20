@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccountService } from 'src/account/account.service';
 import { MEMBER_NOT_FOUND_ERROR } from 'src/constants/exception.constants';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -10,9 +11,14 @@ import { Member } from './entities/member.entity';
 export class MemberService {
   constructor(
     @InjectRepository(Member) private memberRepository: Repository<Member>,
+    private accountService: AccountService,
   ) {}
-  create(createMemberDto: CreateMemberDto) {
-    const newMember = this.memberRepository.create(createMemberDto);
+  async create(createMemberDto: CreateMemberDto, accountId: number) {
+    const account = await this.accountService.findOne(accountId);
+    const newMember = this.memberRepository.create({
+      ...createMemberDto,
+      account,
+    });
     return this.memberRepository.save(newMember);
   }
 

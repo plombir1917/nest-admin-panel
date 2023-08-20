@@ -15,6 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from 'src/roles/entities/roles.entity';
+import 'dotenv/config';
 
 @Injectable()
 export class AuthService {
@@ -45,8 +46,8 @@ export class AuthService {
     return { email: account.email };
   }
 
-  async login(login: string, roles: Role) {
-    const payload = { login, roles };
+  async login(id: number, login: string, roles: Role) {
+    const payload = { id, login, roles };
     return { access_token: await this.jwtService.signAsync(payload) };
   }
 
@@ -60,6 +61,6 @@ export class AuthService {
     if (!account) {
       throw new NotFoundException(ACCOUNT_NOT_FOUND_ERROR);
     }
-    return account.role;
+    return account;
   }
 }
