@@ -24,9 +24,7 @@ export class Account {
   @Column()
   password: string;
 
-  @OneToOne(() => Company, (company) => company.account, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => Company, (company) => company.account)
   company: Company;
 
   @OneToOne(() => Member, (member) => member.account)

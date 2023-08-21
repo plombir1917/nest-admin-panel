@@ -1,11 +1,10 @@
 import { Account } from 'src/account/entities/account.entity';
-import { Event } from 'src/events/entities/events.entity';
+import { MemberToEvent } from 'src/events/entities/memberToEvent.entity';
 import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -18,9 +17,9 @@ export class Member {
   name: string;
   @Column()
   email: string;
-  @ManyToMany(() => Event, (event) => event.member)
-  @JoinTable()
-  event: Event[];
+
+  @OneToMany(() => MemberToEvent, (memberToEvent) => memberToEvent.member)
+  memberToEvent: MemberToEvent[];
 
   @OneToOne(() => Account, (account) => account.member)
   @JoinColumn()

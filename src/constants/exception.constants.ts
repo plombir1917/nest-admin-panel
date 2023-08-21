@@ -9,3 +9,4 @@ export const COMPANY_NOT_FOUND_ERROR = 'Компания не найдена!';
 export const ROLE_NOT_FOUND_ERROR = 'Роль не найдена!';
 export const UNAUTHORIZED_USER = 'Пользователь не авторизован!';
 export const FORBIDDEN = 'Нет доступа!';
+export const ALREADY_EXIST_ERROR = 'Уже существует!';

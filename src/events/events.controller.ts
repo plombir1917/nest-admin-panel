@@ -16,10 +16,16 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { User } from 'src/decorators/account.decorator';
+import { Account } from 'src/account/entities/account.entity';
+import { MemberService } from 'src/member/member.service';
 
 @Controller('events')
 export class EventController {
-  constructor(private readonly eventService: EventService) {}
+  constructor(
+    private readonly eventService: EventService,
+    private readonly memberService: MemberService,
+  ) {}
 
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
@@ -27,6 +33,14 @@ export class EventController {
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventService.create(createEventDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @Post('subscribe/:id')
+  async subscribe(@User() account: Account, @Param('id') id: string) {
+    const member = await this.memberService.create(account);
+    return this.eventService.subscribe(member, +id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -53,6 +67,6 @@ export class EventController {
   @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.eventService.remove(+id);
+    return this.eventService.deleteMemberToEvent(+id);
   }
 }

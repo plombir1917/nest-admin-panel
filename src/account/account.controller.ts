@@ -36,7 +36,12 @@ export class AccountController {
   async login(@Body() { email, password }: AuthDto) {
     const login = await this.authService.validateAccount(email, password);
     const account = await this.authService.findAccount(email);
-    return this.authService.login(account.id, login.email, account.role);
+    return this.authService.login(
+      account.id,
+      account.name,
+      login.email,
+      account.role,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

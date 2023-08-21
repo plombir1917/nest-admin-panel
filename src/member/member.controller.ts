@@ -11,13 +11,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MemberService } from './member.service';
-import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
-import { Account } from 'src/decorators/account.decorator';
+import { User } from 'src/decorators/account.decorator';
+import { Account } from 'src/account/entities/account.entity';
 
 @Controller('member')
 export class MemberController {
@@ -26,18 +26,16 @@ export class MemberController {
     private jwtService: JwtService,
   ) {}
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard, JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
   @Post()
-  create(@Body() createMemberDto: CreateMemberDto, accountId: number) {
-    return this.memberService.create(createMemberDto, accountId);
+  create(@User() account: Account) {
+    return this.memberService.create(account);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Account() id: number) {
-    console.log(id);
+  findAll() {
     return this.memberService.findAll();
   }
 
