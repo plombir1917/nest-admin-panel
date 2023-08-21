@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccountService } from 'src/account/account.service';
 import {
   ALREADY_EXIST_ERROR,
   MEMBER_NOT_FOUND_ERROR,
@@ -18,7 +17,6 @@ import { Member } from './entities/member.entity';
 export class MemberService {
   constructor(
     @InjectRepository(Member) private memberRepository: Repository<Member>,
-    private accountService: AccountService,
   ) {}
   async create(account: CreateMemberDto) {
     const newMember = this.memberRepository.create({ ...account, account });

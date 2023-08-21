@@ -8,7 +8,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Roles } from 'src/auth/roles-auth.decorator';
+import { Roles } from 'src/decorators/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RolesService } from './roles.service';

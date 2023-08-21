@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/auth/roles-auth.decorator';
+import { Roles } from 'src/decorators/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
