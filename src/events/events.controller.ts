@@ -13,10 +13,10 @@ import {
 import { EventService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { User } from 'src/decorators/account.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles-auth.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { User } from 'src/decorators/user.decorator';
 import { Account } from 'src/account/entities/account.entity';
 import { MemberService } from 'src/member/member.service';
 
@@ -38,9 +38,9 @@ export class EventController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
   @Post('subscribe/:id')
-  async subscribe(@User() account: Account, @Param('id') id: string) {
+  async subscribe(@User() account: Account, @Param('id') eventId: string) {
     const member = await this.memberService.create(account);
-    return this.eventService.subscribe(member, +id);
+    return this.eventService.subscribe(member, +eventId);
   }
 
   @UseGuards(JwtAuthGuard)

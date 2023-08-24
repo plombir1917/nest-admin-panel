@@ -13,9 +13,11 @@ import {
 export class Member {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   name: string;
-  @Column()
+
+  @Column({ unique: true })
   email: string;
 
   @OneToMany(() => MemberToEvent, (memberToEvent) => memberToEvent.member)

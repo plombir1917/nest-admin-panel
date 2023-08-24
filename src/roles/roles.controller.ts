@@ -8,8 +8,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/decorators/roles-auth.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RolesService } from './roles.service';
 
@@ -30,5 +30,12 @@ export class RolesController {
   @Get(':value')
   getRoleByValue(@Param(':value') value: string) {
     return this.rolesService.getRoleByValue(value);
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get()
+  getAll() {
+    return this.rolesService.getAll();
   }
 }

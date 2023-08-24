@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { User } from 'src/decorators/account.decorator';
+import { Roles } from 'src/auth/decorators/roles-auth.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { User } from 'src/decorators/user.decorator';
 import { Account } from 'src/account/entities/account.entity';
 
 @Controller('member')
@@ -29,13 +29,15 @@ export class MemberController {
     return this.memberService.create(account);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.memberService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.memberService.findOne(+id);
@@ -49,8 +51,7 @@ export class MemberController {
     return this.memberService.update(+id, updateMemberDto);
   }
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.memberService.remove(+id);

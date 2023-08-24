@@ -4,10 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  ALREADY_EXIST_ERROR,
-  MEMBER_NOT_FOUND_ERROR,
-} from 'src/constants/exception.constants';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
@@ -26,7 +22,7 @@ export class MemberService {
       },
     });
     if (existMember) {
-      throw new BadRequestException(ALREADY_EXIST_ERROR);
+      throw new BadRequestException('Такой участник уже существует!');
     }
     return this.memberRepository.save(newMember);
   }
@@ -36,7 +32,7 @@ export class MemberService {
       relations: { account: true },
     });
     if (!members.length) {
-      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+      throw new NotFoundException('Участник не найден');
     }
     return members;
   }
@@ -47,7 +43,7 @@ export class MemberService {
       relations: { account: true },
     });
     if (!member) {
-      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+      throw new NotFoundException('Участник не найден');
     }
     return member;
   }
@@ -55,7 +51,7 @@ export class MemberService {
   async update(id: number, updateMemberDto: UpdateMemberDto) {
     const member = await this.findOne(id);
     if (!member) {
-      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+      throw new NotFoundException('Участник не найден');
     }
     return this.memberRepository.save({ ...member, ...updateMemberDto });
   }
@@ -63,7 +59,7 @@ export class MemberService {
   async remove(id: number) {
     const member = await this.findOne(id);
     if (!member) {
-      throw new NotFoundException(MEMBER_NOT_FOUND_ERROR);
+      throw new NotFoundException('Участник не найден');
     }
     return this.memberRepository.remove(member);
   }

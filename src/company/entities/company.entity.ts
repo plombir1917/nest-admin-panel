@@ -13,13 +13,22 @@ import {
 export class Company {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   name: string;
+
+  @Column({ unique: true })
+  email: string;
+
   @Column()
   info: string;
-  @OneToOne(() => Account, (account) => account.company)
+
+  @OneToOne(() => Account, (account) => account.company, {
+    cascade: true,
+  })
   @JoinColumn()
   account: Account;
+
   @OneToMany(() => Event, (event) => event.company)
   event: Event[];
 }

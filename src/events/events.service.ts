@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EVENT_NOT_FOUND_ERROR } from 'src/constants/exception.constants';
 import { Member } from 'src/member/entities/member.entity';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -20,8 +19,8 @@ export class EventService {
     return this.eventRepository.save(newEvent);
   }
 
-  async subscribe(member: Member, id: number) {
-    const event = await this.findOne(id);
+  async subscribe(member: Member, eventId: number) {
+    const event = await this.findOne(eventId);
     const newSign = this.memberToEventRepository.create({
       member,
       event,
@@ -32,7 +31,7 @@ export class EventService {
   async findAll() {
     const events = await this.eventRepository.find();
     if (!events.length) {
-      throw new NotFoundException(EVENT_NOT_FOUND_ERROR);
+      throw new NotFoundException('Мероприятие не найдено!');
     }
     return events;
   }
@@ -40,7 +39,7 @@ export class EventService {
   async findOne(id: number) {
     const event = await this.eventRepository.findOneBy({ id });
     if (!event) {
-      throw new NotFoundException(EVENT_NOT_FOUND_ERROR);
+      throw new NotFoundException('Мероприятие не найдено!');
     }
     return event;
   }
@@ -48,7 +47,7 @@ export class EventService {
   async update(id: number, updateEventDto: UpdateEventDto) {
     const event = await this.findOne(id);
     if (!event) {
-      throw new NotFoundException(EVENT_NOT_FOUND_ERROR);
+      throw new NotFoundException('Мероприятие не найдено!');
     }
     return this.eventRepository.save({ ...event, ...updateEventDto });
   }
@@ -56,7 +55,7 @@ export class EventService {
   async remove(id: number) {
     const event = await this.findOne(id);
     if (!event) {
-      throw new NotFoundException(EVENT_NOT_FOUND_ERROR);
+      throw new NotFoundException('Мероприятие не найдено!');
     }
     return this.eventRepository.remove(event);
   }

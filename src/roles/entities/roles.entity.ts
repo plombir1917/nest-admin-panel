@@ -12,10 +12,9 @@ import {
 export class Role {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   value: string;
-  @Column()
-  description: string;
 
   @OneToMany(() => Account, (account) => account.role)
   @JoinColumn()

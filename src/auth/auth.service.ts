@@ -4,20 +4,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import {
-  ACCOUNT_NOT_FOUND_ERROR,
-  CANT_BE_EMPTY_ERROR,
-  WRONG_PASSWORD_ERROR,
-} from 'src/constants/exception.constants';
 import { Account } from 'src/account/entities/account.entity';
-import { comparePassword } from 'src/utils/bcrypt';
+import { comparePassword } from 'src/auth/utils/bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from 'src/roles/entities/roles.entity';
-import 'dotenv/config';
-import { Member } from 'src/member/entities/member.entity';
-import { Company } from 'src/company/entities/company.entity';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +20,7 @@ export class AuthService {
   ) {}
   async validateAccount(email: string, password: string) {
     if (!email) {
-      throw new BadRequestException(CANT_BE_EMPTY_ERROR);
+      throw new BadRequestException('email не может быть пустым!');
     }
     const account = await this.authRepository.findOne({
       where: {
@@ -36,14 +28,14 @@ export class AuthService {
       },
     });
     if (!account) {
-      throw new UnauthorizedException(ACCOUNT_NOT_FOUND_ERROR);
+      throw new UnauthorizedException('Аккаунт не найден!');
     }
     if (!password) {
-      throw new BadRequestException(CANT_BE_EMPTY_ERROR);
+      throw new BadRequestException('password не может быть пустым');
     }
     const isCorrectPassword = await comparePassword(password, account.password);
     if (!isCorrectPassword) {
-      throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
+      throw new UnauthorizedException('Неверный пароль!');
     }
     return { email: account.email };
   }
@@ -61,7 +53,7 @@ export class AuthService {
       relations: { role: true },
     });
     if (!account) {
-      throw new NotFoundException(ACCOUNT_NOT_FOUND_ERROR);
+      throw new NotFoundException('Аккаунт не найден!');
     }
     return account;
   }

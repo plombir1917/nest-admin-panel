@@ -8,7 +8,6 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { UNAUTHORIZED_USER } from 'src/constants/exception.constants';
 import { ROLES_KEY } from '../decorators/roles-auth.decorator';
 
 @Injectable()
@@ -31,7 +30,7 @@ export class RolesGuard implements CanActivate {
       const token = authHeader.split(' ')[1];
 
       if (bearer !== 'Bearer' || !token) {
-        throw new UnauthorizedException(UNAUTHORIZED_USER);
+        throw new UnauthorizedException('Пользователь не авторизован');
       }
 
       const user = this.jwtService.verify(token);
@@ -41,7 +40,7 @@ export class RolesGuard implements CanActivate {
       const index = keys.indexOf('value');
       return roleArray[index].some((value) => requieredRoles.includes(value));
     } catch (e) {
-      throw new UnauthorizedException(UNAUTHORIZED_USER);
+      throw new UnauthorizedException('Пользователь не авторизован');
     }
   }
 }

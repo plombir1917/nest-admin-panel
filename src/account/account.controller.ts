@@ -12,18 +12,26 @@ import {
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthDto } from 'src/auth/dto/auth.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles-auth.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { CompanyService } from 'src/company/company.service';
+import { RolesService } from 'src/roles/roles.service';
+import { Company } from 'src/company/entities/company.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('account')
 export class AccountController {
   constructor(
+    @InjectRepository(Company) private companyRepository: Repository<Company>,
     private readonly accountService: AccountService,
     private readonly authService: AuthService,
+    private readonly companyService: CompanyService,
+    private readonly rolesService: RolesService,
   ) {}
 
   @UsePipes(new ValidationPipe())
@@ -44,13 +52,15 @@ export class AccountController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.accountService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.accountService.findOne(+id);
