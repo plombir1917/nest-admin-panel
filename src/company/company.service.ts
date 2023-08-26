@@ -33,9 +33,6 @@ export class CompanyService {
 
   async findOneByEmail(email: string) {
     const company = await this.companyRepository.findOneBy({ email });
-    if (!company) {
-      throw new NotFoundException('Компания не найдена!');
-    }
     return company;
   }
 

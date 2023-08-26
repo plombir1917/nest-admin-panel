@@ -39,11 +39,11 @@ export class AccountService {
     if (!company) {
       newAccount.role = await this.rolesService.getRoleByValue('USER');
       return this.accountRepository.save(newAccount);
+    } else {
+      newAccount.role = await this.rolesService.getRoleByValue('ADMIN');
+      company.account = newAccount;
+      return this.companyRepository.save(company);
     }
-    newAccount.role = await this.rolesService.getRoleByValue('ADMIN');
-    company.account = newAccount;
-    return this.companyRepository.save(company);
-    // return this.accountRepository.save(newAccount);
   }
 
   async findAll() {

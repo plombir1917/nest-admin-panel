@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Company } from 'src/company/entities/company.entity';
 import { Member } from 'src/member/entities/member.entity';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -11,11 +12,15 @@ import { MemberToEvent } from './entities/memberToEvent.entity';
 export class EventService {
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
+    @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(MemberToEvent)
     private memberToEventRepository: Repository<MemberToEvent>,
   ) {}
-  create(createEventDto: CreateEventDto) {
-    const newEvent = this.eventRepository.create(createEventDto);
+  create(createEventDto: CreateEventDto, company: Company) {
+    const newEvent = this.eventRepository.create({
+      ...createEventDto,
+      company,
+    });
     return this.eventRepository.save(newEvent);
   }
 
@@ -26,6 +31,16 @@ export class EventService {
       event,
     });
     return this.memberToEventRepository.save(newSign);
+  }
+
+  async unSubscribe(id: number) {
+    const sign = await this.memberToEventRepository.delete({
+      id,
+    });
+    if (!sign.affected) {
+      throw new NotFoundException('Запись не найдена!');
+    }
+    return sign;
   }
 
   async findAll() {
@@ -58,12 +73,5 @@ export class EventService {
       throw new NotFoundException('Мероприятие не найдено!');
     }
     return this.eventRepository.remove(event);
-  }
-
-  async deleteMemberToEvent(id: number) {
-    const sign = await this.memberToEventRepository.delete({
-      id,
-    });
-    return sign;
   }
 }

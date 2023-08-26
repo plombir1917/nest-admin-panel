@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Account } from 'src/account/entities/account.entity';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
@@ -40,6 +41,17 @@ export class MemberService {
   async findOne(id: number) {
     const member = await this.memberRepository.findOne({
       where: { id: id },
+      relations: { account: true },
+    });
+    if (!member) {
+      throw new NotFoundException('Участник не найден');
+    }
+    return member;
+  }
+
+  async findOneByAccount(account: Account) {
+    const member = await this.memberRepository.findOne({
+      where: { email: account.email },
       relations: { account: true },
     });
     if (!member) {
