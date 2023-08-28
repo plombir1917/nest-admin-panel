@@ -10,6 +10,7 @@ import {
   ValidationPipe,
   UseGuards,
   NotFoundException,
+  Logger,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -26,12 +27,16 @@ import { Repository } from 'typeorm';
 
 @Controller('events')
 export class EventController {
+  logger: Logger;
+
   constructor(
     @InjectRepository(MemberToEvent)
     private memberToEventRepository: Repository<MemberToEvent>,
     private readonly eventService: EventService,
     private readonly memberService: MemberService,
-  ) {}
+  ) {
+    this.logger = new Logger(EventController.name);
+  }
 
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
@@ -60,10 +65,14 @@ export class EventController {
       where: {
         event: event,
       },
+      relations: { member: true },
     });
     if (!sign) {
       throw new NotFoundException('Запись не найдена!');
     }
+    this.logger.log(
+      `${sign.member.email} unsubscribed from ${event.name} at ${Date()}`,
+    );
     return this.eventService.unSubscribe(sign.id);
   }
 

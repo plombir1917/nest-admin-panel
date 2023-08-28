@@ -54,9 +54,9 @@ export class MemberService {
       where: { email: account.email },
       relations: { account: true },
     });
-    if (!member) {
-      throw new NotFoundException('Участник не найден');
-    }
+    // if (!member) {
+    //   throw new NotFoundException('Участник не найден');
+    // }
     return member;
   }
 

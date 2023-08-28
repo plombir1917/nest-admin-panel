@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Logger,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/entities/company.entity';
 import { Member } from 'src/member/entities/member.entity';
@@ -10,13 +15,16 @@ import { MemberToEvent } from './entities/memberToEvent.entity';
 
 @Injectable()
 export class EventService {
+  logger: Logger;
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(MemberToEvent)
     private memberToEventRepository: Repository<MemberToEvent>,
-  ) {}
-  create(createEventDto: CreateEventDto, company: Company) {
+  ) {
+    this.logger = new Logger(EventService.name);
+  }
+  async create(createEventDto: CreateEventDto, company: Company) {
     const newEvent = this.eventRepository.create({
       ...createEventDto,
       company,
@@ -26,10 +34,20 @@ export class EventService {
 
   async subscribe(member: Member, eventId: number) {
     const event = await this.findOne(eventId);
+    const eventDate = event.date;
+    const equalDate = new Date();
+    if (eventDate.getTime() < equalDate.getTime()) {
+      throw new BadRequestException('Мероприятие прошло');
+    }
     const newSign = this.memberToEventRepository.create({
       member,
       event,
     });
+    const existSign = await this.memberToEventRepository.findOneBy(newSign);
+    if (existSign) {
+      throw new BadRequestException('Такая запись уже существует');
+    }
+    this.logger.log(`${member.email} subscribed on ${event.name} at ${Date()}`);
     return this.memberToEventRepository.save(newSign);
   }
 
