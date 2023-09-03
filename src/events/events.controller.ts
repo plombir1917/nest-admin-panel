@@ -76,7 +76,6 @@ export class EventController {
     return this.eventService.unSubscribe(sign.id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.eventService.findAll();
