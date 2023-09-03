@@ -51,11 +51,12 @@ export class EventService {
     return this.memberToEventRepository.save(newSign);
   }
 
-  async unSubscribe(id: number) {
-    const sign = await this.memberToEventRepository.delete({
+  async unSubscribe(sign: MemberToEvent) {
+    const id = sign.id;
+    const deletedSign = await this.memberToEventRepository.delete({
       id,
     });
-    if (!sign.affected) {
+    if (!deletedSign.affected) {
       throw new NotFoundException('Запись не найдена!');
     }
     return sign;

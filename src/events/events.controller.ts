@@ -65,7 +65,7 @@ export class EventController {
       where: {
         event: event,
       },
-      relations: { member: true },
+      relations: { member: true, event: true },
     });
     if (!sign) {
       throw new NotFoundException('Запись не найдена!');
@@ -73,7 +73,7 @@ export class EventController {
     this.logger.log(
       `${sign.member.email} unsubscribed from ${event.name} at ${Date()}`,
     );
-    return this.eventService.unSubscribe(sign.id);
+    return this.eventService.unSubscribe(sign);
   }
 
   @Get()
