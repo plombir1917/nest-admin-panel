@@ -23,6 +23,8 @@ import { RolesService } from 'src/roles/roles.service';
 import { Company } from 'src/company/entities/company.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/decorators/user.decorator';
+import { Account } from './entities/account.entity';
 
 @Controller('account')
 export class AccountController {
@@ -59,6 +61,12 @@ export class AccountController {
   @Get()
   findAll() {
     return this.accountService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('my')
+  findMyAccount(@User() account: Account) {
+    return this.accountService.findOne(account.id);
   }
 
   @Roles('ADMIN')
