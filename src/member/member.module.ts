@@ -1,15 +1,16 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { MemberController } from './member.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Member } from './entities/member.entity';
-import { Account } from 'src/account/entities/account.entity';
-import { RolesService } from 'src/roles/roles.service';
-import { Role } from 'src/roles/entities/roles.entity';
+import { RolesModule } from 'src/roles/roles.module';
+import { AccountModule } from 'src/account/account.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Member, Account, Role])],
+  imports: [TypeOrmModule.forFeature([Member]), RolesModule, AccountModule],
   controllers: [MemberController],
-  providers: [MemberService, RolesService],
+  providers: [MemberService],
+  exports: [MemberModule, MemberService],
 })
 export class MemberModule {}

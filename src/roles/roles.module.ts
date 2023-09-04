@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RolesController } from './roles.controller';
@@ -8,6 +9,6 @@ import { Role } from './entities/roles.entity';
   imports: [TypeOrmModule.forFeature([Role])],
   controllers: [RolesController],
   providers: [RolesService],
-  exports: [RolesService],
+  exports: [RolesService, RolesModule],
 })
 export class RolesModule {}
