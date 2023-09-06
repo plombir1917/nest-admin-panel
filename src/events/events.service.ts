@@ -18,7 +18,6 @@ export class EventService {
   logger: Logger;
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
-    @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(MemberToEvent)
     private memberToEventRepository: Repository<MemberToEvent>,
   ) {
@@ -50,7 +49,11 @@ export class EventService {
       member,
       event,
     });
-    const existSign = await this.memberToEventRepository.findOneBy(newSign);
+    const existSign = await this.memberToEventRepository.findOne({
+      where: { member: member.memberToEvent, event: event },
+      relations: { member: true, event: true },
+    });
+    console.log(existSign);
     if (existSign) {
       throw new BadRequestException('Такая запись уже существует');
     }

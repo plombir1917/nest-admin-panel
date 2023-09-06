@@ -50,9 +50,9 @@ export class EventController {
   @UsePipes(new ValidationPipe())
   @Post('subscribe/:id')
   async subscribe(@User() account: Account, @Param('id') eventId: string) {
-    const member = await this.memberService.findOneByAccount(account);
+    let member = await this.memberService.findOneByAccount(account);
     if (!member) {
-      await this.memberService.create(account);
+      member = await this.memberService.create(account);
     }
     return this.eventService.subscribe(member, +eventId);
   }
