@@ -29,6 +29,13 @@ export class EventService {
       ...createEventDto,
       company,
     });
+    const eventDate = new Date(newEvent.date);
+    const equalDate = new Date();
+    if (eventDate.getTime() < equalDate.getTime()) {
+      throw new BadRequestException(
+        'Невозможно добавить мероприятие с прошедшей датой!',
+      );
+    }
     return this.eventRepository.save(newEvent);
   }
 
@@ -37,7 +44,7 @@ export class EventService {
     const eventDate = event.date;
     const equalDate = new Date();
     if (eventDate.getTime() < equalDate.getTime()) {
-      throw new BadRequestException('Мероприятие прошло');
+      throw new BadRequestException('Мероприятие уже завершено!');
     }
     const newSign = this.memberToEventRepository.create({
       member,
