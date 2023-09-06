@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/events.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { MemberModule } from 'src/member/member.module';
-import { Member } from 'src/member/entities/member.entity';
 import { AccountModule } from 'src/account/account.module';
 import { MemberToEvent } from './entities/memberToEvent.entity';
 import { RolesModule } from 'src/roles/roles.module';
@@ -14,7 +13,7 @@ import { CompanyModule } from 'src/company/company.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Event, Member, MemberToEvent]),
+    TypeOrmModule.forFeature([Event, MemberToEvent]),
     AuthModule,
     MemberModule,
     AccountModule,
@@ -23,6 +22,5 @@ import { CompanyModule } from 'src/company/company.module';
   ],
   controllers: [EventController],
   providers: [EventService],
-  exports: [EventModule],
 })
 export class EventModule {}

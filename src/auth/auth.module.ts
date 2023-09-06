@@ -19,6 +19,6 @@ const configService = new ConfigService();
     }),
   ],
   providers: [AuthService],
-  exports: [AuthService, JwtModule, AuthModule],
+  exports: [AuthService],
 })
 export class AuthModule {}

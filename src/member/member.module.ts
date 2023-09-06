@@ -11,6 +11,6 @@ import { AccountModule } from 'src/account/account.module';
   imports: [TypeOrmModule.forFeature([Member]), RolesModule, AccountModule],
   controllers: [MemberController],
   providers: [MemberService],
-  exports: [MemberModule, MemberService],
+  exports: [MemberService],
 })
 export class MemberModule {}
