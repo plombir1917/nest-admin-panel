@@ -67,6 +67,7 @@ export class AccountService {
     if (!account) {
       throw new NotFoundException('Аккаунт не найден!');
     }
+    updateAccountDto.password = await encodePassword(updateAccountDto.password);
     return this.accountRepository.save({ ...account, ...updateAccountDto });
   }
 

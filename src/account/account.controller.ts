@@ -19,7 +19,6 @@ import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { CompanyService } from 'src/company/company.service';
-import { RolesService } from 'src/roles/roles.service';
 import { Company } from 'src/company/entities/company.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,7 +32,6 @@ export class AccountController {
     private readonly accountService: AccountService,
     private readonly authService: AuthService,
     private readonly companyService: CompanyService,
-    private readonly rolesService: RolesService,
   ) {}
 
   @UsePipes(new ValidationPipe())
@@ -64,7 +62,7 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('my')
+  @Get('profile')
   findMyAccount(@User() account: Account) {
     return this.accountService.findOne(account.id);
   }
@@ -77,6 +75,17 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @Patch('profile')
+  updateMyAccount(
+    @Body() updateAccountDto: UpdateAccountDto,
+    @User() account: Account,
+  ) {
+    return this.accountService.update(account.id, updateAccountDto);
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @UsePipes(new ValidationPipe())
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
