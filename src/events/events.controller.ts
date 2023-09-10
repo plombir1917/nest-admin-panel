@@ -10,7 +10,6 @@ import {
   ValidationPipe,
   UseGuards,
   NotFoundException,
-  Logger,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -27,16 +26,12 @@ import { Repository } from 'typeorm';
 
 @Controller('events')
 export class EventController {
-  logger: Logger;
-
   constructor(
     @InjectRepository(MemberToEvent)
     private memberToEventRepository: Repository<MemberToEvent>,
     private readonly eventService: EventService,
     private readonly memberService: MemberService,
-  ) {
-    this.logger = new Logger(EventController.name);
-  }
+  ) {}
 
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
@@ -59,21 +54,20 @@ export class EventController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('unsubscribe/:id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @User() account: Account) {
     const event = await this.eventService.findOne(+id);
+    const member = await this.memberService.findOneByAccount(account);
     const sign = await this.memberToEventRepository.findOne({
       where: {
         event: event,
+        member: member.memberToEvent,
       },
       relations: { member: true, event: true },
     });
     if (!sign) {
       throw new NotFoundException('Запись не найдена!');
     }
-    this.logger.log(
-      `${sign.member.email} unsubscribed from ${event.name} at ${Date()}`,
-    );
-    return this.eventService.unSubscribe(sign);
+    return this.eventService.unSubscribe(sign, event);
   }
 
   @Get()
@@ -81,7 +75,6 @@ export class EventController {
     return this.eventService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventService.findOne(+id);

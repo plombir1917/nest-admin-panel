@@ -53,7 +53,6 @@ export class EventService {
       where: { member: member.memberToEvent, event: event },
       relations: { member: true, event: true },
     });
-    console.log(existSign);
     if (existSign) {
       throw new BadRequestException('Такая запись уже существует');
     }
@@ -61,7 +60,7 @@ export class EventService {
     return this.memberToEventRepository.save(newSign);
   }
 
-  async unSubscribe(sign: MemberToEvent) {
+  async unSubscribe(sign: MemberToEvent, event: Event) {
     const id = sign.id;
     const deletedSign = await this.memberToEventRepository.delete({
       id,
@@ -69,6 +68,9 @@ export class EventService {
     if (!deletedSign.affected) {
       throw new NotFoundException('Запись не найдена!');
     }
+    this.logger.log(
+      `${sign.member.email} unsubscribed from ${event.name} at ${Date()}`,
+    );
     return sign;
   }
 

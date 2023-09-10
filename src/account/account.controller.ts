@@ -19,16 +19,12 @@ import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { CompanyService } from 'src/company/company.service';
-import { Company } from 'src/company/entities/company.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/decorators/user.decorator';
 import { Account } from './entities/account.entity';
 
 @Controller('account')
 export class AccountController {
   constructor(
-    @InjectRepository(Company) private companyRepository: Repository<Company>,
     private readonly accountService: AccountService,
     private readonly authService: AuthService,
     private readonly companyService: CompanyService,

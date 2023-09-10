@@ -51,4 +51,8 @@ export class CompanyService {
     }
     return this.companyRepository.remove(company);
   }
+
+  save(company: Company) {
+    return this.companyRepository.save(company);
+  }
 }

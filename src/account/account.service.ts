@@ -11,13 +11,11 @@ import { Account } from './entities/account.entity';
 import { encodePassword } from 'src/auth/utils/bcrypt';
 import { RolesService } from 'src/roles/roles.service';
 import { CompanyService } from 'src/company/company.service';
-import { Company } from 'src/company/entities/company.entity';
 
 @Injectable()
 export class AccountService {
   constructor(
     @InjectRepository(Account) private accountRepository: Repository<Account>,
-    @InjectRepository(Company) private companyRepository: Repository<Company>,
     private rolesService: RolesService,
     private companyService: CompanyService,
   ) {}
@@ -42,7 +40,7 @@ export class AccountService {
     } else {
       newAccount.role = await this.rolesService.getRoleByValue('ADMIN');
       company.account = newAccount;
-      return this.companyRepository.save(company);
+      return this.companyService.save(company);
     }
   }
 
@@ -66,8 +64,11 @@ export class AccountService {
     const account = await this.findOne(id);
     if (!account) {
       throw new NotFoundException('Аккаунт не найден!');
+    } else if (updateAccountDto.password) {
+      updateAccountDto.password = await encodePassword(
+        updateAccountDto.password,
+      );
     }
-    updateAccountDto.password = await encodePassword(updateAccountDto.password);
     return this.accountRepository.save({ ...account, ...updateAccountDto });
   }
 
