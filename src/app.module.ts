@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from 'db/typeorm.config';
 import { RolesModule } from './roles/roles.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RolesModule } from './roles/roles.module';
     MemberModule,
     AuthModule,
     RolesModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
