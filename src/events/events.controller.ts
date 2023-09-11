@@ -9,7 +9,10 @@ import {
   UsePipes,
   ValidationPipe,
   UseGuards,
+  UseInterceptors,
   NotFoundException,
+  HttpCode,
+  UploadedFile,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -23,6 +26,9 @@ import { MemberService } from 'src/member/member.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MemberToEvent } from './entities/memberToEvent.entity';
 import { Repository } from 'typeorm';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileElementResponce } from '../files/dto/file-element.responce';
+import { FilesService } from '../files/files.service';
 
 @Controller('events')
 export class EventController {
@@ -31,6 +37,7 @@ export class EventController {
     private memberToEventRepository: Repository<MemberToEvent>,
     private readonly eventService: EventService,
     private readonly memberService: MemberService,
+    private readonly filesService: FilesService,
   ) {}
 
   @Roles('ADMIN')
@@ -86,5 +93,26 @@ export class EventController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
     return this.eventService.update(+id, updateEventDto);
+  }
+
+  @Post('upload/:id')
+  @HttpCode(200)
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @UseInterceptors(FileInterceptor('files'))
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ): Promise<FileElementResponce[]> {
+    const event = await this.eventService.findOne(+id);
+    if (!event) {
+      throw new NotFoundException('Нет такого мероприятия!');
+    }
+    const res = await this.filesService.saveFiles([file], event);
+    this.eventService.addImage(
+      event.id,
+      res.find((res) => res.name === event.name),
+    );
+    return res;
   }
 }

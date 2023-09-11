@@ -12,4 +12,7 @@ export class CreateEventDto {
   description: string;
   @IsNotEmpty()
   date: Date;
+  @IsNotEmpty()
+  @IsString()
+  image: string;
 }

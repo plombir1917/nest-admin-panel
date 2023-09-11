@@ -10,6 +10,7 @@ import { AccountModule } from 'src/account/account.module';
 import { MemberToEvent } from './entities/memberToEvent.entity';
 import { RolesModule } from 'src/roles/roles.module';
 import { CompanyModule } from 'src/company/company.module';
+import { FilesService } from 'src/files/files.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { CompanyModule } from 'src/company/company.module';
     CompanyModule,
   ],
   controllers: [EventController],
-  providers: [EventService],
+  providers: [EventService, FilesService],
 })
 export class EventModule {}

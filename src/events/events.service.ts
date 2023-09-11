@@ -105,4 +105,12 @@ export class EventService {
     }
     return this.eventRepository.remove(event);
   }
+
+  async addImage(id: number, url: UpdateEventDto) {
+    const event = await this.findOne(id);
+    if (!event) {
+      throw new NotFoundException('Мероприятие не найдено!');
+    }
+    return this.eventRepository.save({ ...event, url });
+  }
 }

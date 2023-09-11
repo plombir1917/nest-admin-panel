@@ -26,6 +26,9 @@ export class Event {
   @Column({ type: 'timestamptz' })
   date: Date;
 
+  @Column()
+  image: string;
+
   @ManyToOne(() => Company, (company) => company.event)
   @JoinColumn()
   company: Company;
