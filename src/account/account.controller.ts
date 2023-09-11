@@ -30,12 +30,13 @@ export class AccountController {
     private readonly companyService: CompanyService,
   ) {}
 
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ whitelist: true }))
   @Post('register')
   async register(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
 
+  @UsePipes(new ValidationPipe({ whitelist: true }))
   @Post('login')
   async login(@Body() { email, password }: AuthDto) {
     const login = await this.authService.validateAccount(email, password);
@@ -71,7 +72,7 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ whitelist: true }))
   @Patch('profile')
   updateMyAccount(
     @Body() updateAccountDto: UpdateAccountDto,
