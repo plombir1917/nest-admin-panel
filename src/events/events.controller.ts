@@ -13,6 +13,7 @@ import {
   NotFoundException,
   HttpCode,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -104,15 +105,16 @@ export class EventController {
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
   ): Promise<FileElementResponce[]> {
+    if (!file) {
+      throw new BadRequestException('Нет загружаемого файла!');
+    }
     const event = await this.eventService.findOne(+id);
     if (!event) {
       throw new NotFoundException('Нет такого мероприятия!');
     }
     const res = await this.filesService.saveFiles([file], event);
-    this.eventService.addImage(
-      event.id,
-      res.find((res) => res.name === event.name),
-    );
+    const image = res.find((item) => item.name == file.originalname);
+    this.eventService.addImage(event.id, image.url);
     return res;
   }
 }
