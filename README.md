@@ -1,73 +1,135 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Admin Panel API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 🚀 Описание проекта
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Это современное REST API приложение, построенное на базе NestJS фреймворка, предоставляющее полный набор функций для управления административной панелью. Проект реализует надежную и масштабируемую архитектуру с использованием TypeScript и следует лучшим практикам разработки.
 
-## Description
+## ✨ Основные возможности
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 🔐 Полная система аутентификации и авторизации
+- 👥 Управление пользователями и ролями
+- 🏢 Управление компаниями
+- 📅 Система событий
+- 📁 Управление файлами
+- 👤 Управление аккаунтами
+- 🔄 Миграции базы данных
 
-## Installation
+## 🛠 Технологический стек
 
+- **Backend Framework:** NestJS 9.x
+- **Language:** TypeScript
+- **Database:** PostgreSQL
+- **ORM:** TypeORM
+- **Authentication:** JWT (JSON Web Tokens)
+- **Validation:** class-validator, class-transformer
+- **Testing:** Jest
+- **Code Quality:** ESLint, Prettier
+
+## 📋 Требования
+
+- Node.js (рекомендуется версия 16.x или выше)
+- PostgreSQL 12.x или выше
+- npm или yarn
+
+## 🚀 Установка и запуск
+
+1. Клонируйте репозиторий:
 ```bash
-$ npm install
+git clone [url-репозитория]
+cd nest-admin-panel-api
 ```
 
-## Running the app
-
+2. Установите зависимости:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+3. Создайте файл .env в корневой директории и настройте переменные окружения:
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/database_name
+JWT_SECRET=your_jwt_secret
 ```
 
-## Support
+4. Запустите миграции:
+```bash
+npm run migration:run
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+5. Запустите приложение:
+```bash
+# Режим разработки
+npm run start:dev
 
-## Stay in touch
+# Продакшн режим
+npm run build
+npm run start:prod
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📚 Доступные скрипты
 
-## License
+- `npm run start:dev` - Запуск в режиме разработки
+- `npm run build` - Сборка проекта
+- `npm run start:prod` - Запуск в продакшн режиме
+- `npm run test` - Запуск тестов
+- `npm run test:e2e` - Запуск end-to-end тестов
+- `npm run migration:create` - Создание новой миграции
+- `npm run migration:run` - Запуск миграций
+- `npm run migration:revert` - Откат последней миграции
 
-Nest is [MIT licensed](LICENSE).
+## 🏗 Структура проекта
+
+```
+src/
+├── account/        # Модуль управления аккаунтами
+├── auth/          # Модуль аутентификации
+├── company/       # Модуль управления компаниями
+├── decorators/    # Пользовательские декораторы
+├── events/        # Модуль управления событиями
+├── files/         # Модуль управления файлами
+├── member/        # Модуль управления участниками
+└── roles/         # Модуль управления ролями
+```
+
+## 🔒 Безопасность
+
+- JWT аутентификация
+- Хеширование паролей с использованием bcrypt
+- Валидация входных данных
+- Защита от SQL-инъекций через TypeORM
+- CORS настройки
+
+## 🧪 Тестирование
+
+Проект включает в себя:
+- Unit тесты
+- E2E тесты
+- Интеграционные тесты
+
+Запуск тестов:
+```bash
+npm run test
+npm run test:e2e
+```
+
+## 📝 API Документация
+
+API документация доступна по адресу `/api` после запуска приложения.
+
+## 🤝 Вклад в проект
+
+1. Форкните репозиторий
+2. Создайте ветку для новой функциональности
+3. Внесите изменения
+4. Создайте Pull Request
+
+## 📄 Лицензия
+
+Этот проект является приватным и не подлежит распространению без разрешения.
+
+## 👥 Авторы
+
+- Ваше имя/команда
+
+## 📞 Поддержка
+
+По всем вопросам обращайтесь: [ваш email]
